@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poorna Viraam — An Animated Feature</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cosmos:#0A0E17;
+    --cosmos2:#0F1422;
+    --gold:#D4A93B;
+    --vermillion:#FF5A36;
+    --teal:#57E8C9;
+    --stone:#9B9B95;
+    --paper:#F2EFE6;
+    --line: rgba(242,239,230,0.14);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--cosmos);
+    color:var(--paper);
+    font-family:'Space Grotesk', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; }
+  .serif{ font-family:'Cormorant Garamond', serif; }
+  .mono{ font-family:'Space Grotesk', sans-serif; letter-spacing:0.1em; text-transform:uppercase; }
+
+  :focus-visible{ outline:3px solid var(--teal); outline-offset:3px; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 clamp(20px,5vw,64px); }
+
+  nav.top{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter: blur(6px);
+    background: rgba(10,14,23,0.7);
+    border-bottom:1px solid var(--line);
+  }
+  nav.top .wrap{ display:flex; align-items:center; justify-content:space-between; height:60px; }
+  .back{
+    font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
+    text-decoration:none; color:var(--paper); opacity:0.8;
+    display:flex; align-items:center; gap:8px;
+  }
+  .back:hover{ opacity:1; }
+  .stamp{
+    font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--gold); border:1px solid var(--gold); padding:5px 10px;
+  }
+  .notebook-link{
+    font-size:0.7rem; letter-spacing:0.1em;
+    color:var(--teal); text-decoration:none; opacity:0.85;
+  }
+  .notebook-link:hover{ opacity:1; }
+
+  /* ---------------- HERO ---------------- */
+  .hero{
+    position:relative;
+    min-height: 92vh;
+    display:flex; flex-direction:column; justify-content:center;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-bg{ position:absolute; inset:0; z-index:0; }
+  .stars{
+    position:absolute; inset:0;
+    background-image: radial-gradient(rgba(242,239,230,0.8) 1px, transparent 1.5px);
+    background-size: 60px 60px;
+    animation: twinkle 6s ease-in-out infinite;
+  }
+  .stars.small{
+    background-size: 34px 34px;
+    background-position: 17px 11px;
+    opacity:0.5;
+    animation-duration: 8s;
+    animation-delay: 1.2s;
+  }
+  @keyframes twinkle{ 0%,100%{ opacity:0.55;} 50%{ opacity:0.9;} }
+
+  .pattern-layer{ position:absolute; inset:0; }
+  .jali{
+    background-image:
+      repeating-linear-gradient(45deg, rgba(212,169,59,0.5) 0 1.5px, transparent 1.5px 26px),
+      repeating-linear-gradient(-45deg, rgba(212,169,59,0.5) 0 1.5px, transparent 1.5px 26px);
+    -webkit-mask-image: linear-gradient(to right, black 0%, black 38%, transparent 68%);
+    mask-image: linear-gradient(to right, black 0%, black 38%, transparent 68%);
+  }
+  .grid{
+    background-image:
+      repeating-linear-gradient(0deg, rgba(155,155,149,0.5) 0 1.5px, transparent 1.5px 38px),
+      repeating-linear-gradient(90deg, rgba(155,155,149,0.5) 0 1.5px, transparent 1.5px 38px);
+    -webkit-mask-image: linear-gradient(to left, black 0%, black 38%, transparent 68%);
+    mask-image: linear-gradient(to left, black 0%, black 38%, transparent 68%);
+  }
+  .vignette{
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 50% 40%, transparent 35%, var(--cosmos) 92%);
+  }
+
+  .hero-content{ position:relative; z-index:1; }
+  .hero-content .wrap{ padding-top:40px; padding-bottom:60px; }
+
+  .stamp-row{ display:flex; gap:12px; align-items:center; margin-bottom:30px; flex-wrap:wrap; }
+
+  h1.film-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    line-height:0.95;
+    margin:0;
+    font-size: clamp(3.2rem, 10vw, 7.2rem);
+    letter-spacing:0.005em;
+  }
+  h1.film-title .gloss{
+    display:block;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+    font-size:0.78rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--stone);
+    margin-top:16px;
+  }
+  p.tagline{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:500;
+    line-height:1.25;
+    margin: 22px 0 0;
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    max-width:20ch;
+    color: rgba(242,239,230,0.85);
+  }
+  p.tagline .accent{ color:var(--vermillion); font-style:normal; }
+
+  .meta-row{
+    margin-top:34px;
+    font-size:0.72rem;
+    color:var(--stone);
+    display:flex; gap:18px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .meta-row .sep{ opacity:0.4; }
+
+  .hero-scroll{
+    position:absolute; bottom:28px; left:0; right:0; z-index:1;
+    text-align:center;
+  }
+  .hero-scroll a{
+    font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
+    text-decoration:none; color:var(--paper); opacity:0.6;
+  }
+
+  /* ---------------- SECTIONS ---------------- */
+  section.block{ padding: clamp(64px,10vw,120px) 0; border-bottom:1px solid var(--line); }
+  .eyebrow{
+    font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:22px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .rule{ width:30px; height:1px; background:currentColor; opacity:0.6; }
+
+  h2.block-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    margin: 0 0 40px;
+    max-width:18ch;
+  }
+
+  /* world triptych */
+  .triptych{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,4vw,40px); }
+  .triptych figure{ margin:0; }
+  .triptych .icon{ margin-bottom:22px; opacity:0.85; }
+  .triptych h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600; font-style:italic;
+    font-size:1.5rem; margin:0 0 12px;
+    color:var(--vermillion);
+  }
+  .triptych p{ color:var(--stone); line-height:1.65; font-size:0.96rem; margin:0; }
+
+  /* aesthetic divider strip */
+  .divider-strip{
+    height: clamp(90px,14vw,150px);
+    position:relative;
+    margin: 0 0 -1px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .divider-strip .pattern-layer{ position:absolute; inset:0; }
+
+  .aesthetic-copy{ max-width:62ch; }
+  .aesthetic-copy p{ font-size:1.06rem; line-height:1.75; color:rgba(242,239,230,0.85); }
+  .aesthetic-copy p + p{ margin-top:18px; }
+  .aesthetic-copy em{ font-style:italic; color:var(--paper); }
+  .touchpoints{
+    margin-top:22px;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:0.8rem;
+    line-height:1.6;
+    color:var(--stone);
+  }
+  .touchpoints .tp-label{
+    color:var(--gold); text-transform:uppercase;
+    letter-spacing:0.12em; font-size:0.68rem;
+    margin-right:10px;
+  }
+
+  .themes-copy{ max-width:62ch; }
+  .themes-copy p{ font-size:1.06rem; line-height:1.75; color:rgba(242,239,230,0.85); }
+
+  /* status board */
+  .status-board{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; max-width:680px; }
+  .status-row{
+    display:flex; justify-content:space-between; align-items:center;
+    border:1px solid var(--line); padding:14px 18px;
+    font-size:0.78rem;
+  }
+  .status-row .label{ letter-spacing:0.08em; text-transform:uppercase; color:var(--paper); }
+  .status-row .tag{ color:var(--teal); letter-spacing:0.06em; text-transform:uppercase; font-size:0.7rem; }
+
+  @media (max-width: 760px){
+    .triptych{ grid-template-columns:1fr; gap:36px; }
+    .status-board{ grid-template-columns:1fr; }
+  }
+
+  footer.site-end{ padding: 36px 0 60px; }
+  footer.site-end .wrap{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+  }
+  footer.site-end .back{ opacity:0.85; }
+  footer.site-end .copy{ font-size:0.7rem; letter-spacing:0.08em; color:var(--stone); }
+
+  .bridge-text{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    color: rgba(242,239,230,0.7);
+    margin:0;
+  }
+  .bridge-link{
+    color:var(--teal);
+    text-decoration-color: rgba(87,232,201,0.45);
+  }
+  .bridge-link:hover{ text-decoration-color: var(--teal); }
+
+  @media (prefers-reduced-motion: reduce){
+    .stars{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a href="index.html" class="back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M2 7L6 3M2 7L6 11" stroke="currentColor" stroke-width="1.6"/></svg>
+      Index
+    </a>
+    <span class="stamp">Poorna Viraam</span>
+    <a href="notebook.html?project=poorna-viraam" class="notebook-link mono">✷ Notebook</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-bg">
+    <div class="stars"></div>
+    <div class="stars small"></div>
+    <div class="pattern-layer jali"></div>
+    <div class="pattern-layer grid"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="wrap">
+      <div class="stamp-row mono" style="font-size:0.68rem; color:var(--stone);">
+        <span>Animated Feature</span><span class="sep">·</span><span>Dragons / Aliens / Humans</span><span class="sep">·</span><span style="color:var(--teal)">In Development</span>
+      </div>
+      <h1 class="film-title">Poorna Viraam<span class="gloss">Hindi for &ldquo;full stop&rdquo;</span></h1>
+      <p class="tagline">When the old myths run out, <span class="accent">who tells the next one?</span></p>
+      <div class="meta-row mono">
+        <span>Feature length</span><span class="sep">/</span>
+        <span>Animated</span><span class="sep">/</span>
+        <span>World &amp; story in active development</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <a href="#world">↓ The World</a>
+  </div>
+</header>
+
+<section class="block" id="world">
+  <div class="wrap">
+    <div class="eyebrow mono"><span class="rule"></span>Cast of species</div>
+    <h2 class="block-title serif">Three ways of needing a story to be true.</h2>
+
+    <div class="triptych">
+      <figure>
+        <div class="icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="11" r="6" stroke="var(--vermillion)" stroke-width="1.6"/><path d="M8 34C8 25 13 20 20 20C27 20 32 25 32 34" stroke="var(--vermillion)" stroke-width="1.6"/></svg>
+        </div>
+        <h3>Humans</h3>
+        <p>A civilization at its peak — an imagined, futurist India that solved its fights with nature generations ago. That peace made them gentler, more abstract, and quietly unrehearsed for what it feels like to face death again.</p>
+      </figure>
+      <figure>
+        <div class="icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M4 30C10 30 10 20 16 20C22 20 18 8 28 8C33 8 36 12 36 16" stroke="var(--vermillion)" stroke-width="1.6"/></svg>
+        </div>
+        <h3>Dragons</h3>
+        <p>Ancient, territorial, and content to be left alone — until they weren't. Their first strike back was meant as a warning. Something that powerful was never built to be that precise.</p>
+      </figure>
+      <figure>
+        <div class="icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><polygon points="20,5 33,14 28,30 12,30 7,14" stroke="var(--vermillion)" stroke-width="1.6"/></svg>
+        </div>
+        <h3>Aliens</h3>
+        <p>Not a visitor — a swarm. Countless small, incomprehensible parts that only resolve into sense once you stop looking at any one of them. Hit it as hard as you can, and it just absorbs the blow and redistributes it.</p>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow mono"><span class="rule"></span>Approach</div>
+    <h2 class="block-title serif">Starts small. Stays human.</h2>
+    <div class="aesthetic-copy">
+      <p>
+        The film opens close — an ordinary, recognizable human story, almost a love story, with the wider
+        world mentioned only in passing. The dragons stay a rumor in the background for as long as the
+        story can afford it.
+      </p>
+      <p>
+        By the time the scale of what's actually happening becomes clear, the humans on screen are already
+        people you know — not a population statistic.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="divider-strip" aria-hidden="true">
+  <div class="pattern-layer jali"></div>
+  <div class="pattern-layer grid"></div>
+</div>
+
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow mono"><span class="rule"></span>Aesthetic</div>
+    <h2 class="block-title serif">Old ornament. New structure.</h2>
+    <div class="aesthetic-copy">
+      <p>
+        Humanity here is an imagined, perfected India — closer to a futurist Gupta Empire than anything
+        literal — told through architecture rather than exposition. Think the scale and light of
+        <em>Arcane</em>'s high society, but built from Indian forms instead of cathedrals: tall
+        colored-glass openings, carved stonework, jali lattices, all pushed into something extremely
+        postmodern.
+      </p>
+      <p>
+        Holy and concrete, in the same shot. Every space in the film is a negotiation between the two —
+        which one is currently allowed to dominate the frame says as much about the scene as anything
+        in the dialogue.
+      </p>
+      <p class="touchpoints"><span class="tp-label">Touchpoints</span>Arcane (scale &amp; light) · the Ramayana anime (an outsider's take on mythic India) · Wakanda from Black Panther (the exercise of imagining your own culture's ideal city)</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow mono"><span class="rule"></span>Themes</div>
+    <h2 class="block-title serif">A shared mythology, running out.</h2>
+    <div class="themes-copy">
+      <p>
+        Three species, three different relationships to meaning — one still building it, one that's lost
+        faith in it, one that never needed it to begin with. The film follows what happens when all three
+        are forced to share a single, dying mythology, and what each of them chooses to do once it's gone.
+      </p>
+      <p>
+        It starts with a civilization that has effectively solved its own survival — peaked, secure, and
+        several generations removed from anything resembling real danger. The story exists to take that
+        away from them, and watch what's underneath.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="eyebrow mono"><span class="rule"></span>Status</div>
+    <h2 class="block-title serif">Currently in active development.</h2>
+    <div class="status-board mono">
+      <div class="status-row"><span class="label">World</span><span class="tag">In Progress</span></div>
+      <div class="status-row"><span class="label">Creatures</span><span class="tag">In Progress</span></div>
+      <div class="status-row"><span class="label">Story</span><span class="tag">In Progress</span></div>
+      <div class="status-row"><span class="label">Characters</span><span class="tag">In Progress</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="border-bottom:none;">
+  <div class="wrap">
+    <p class="bridge-text">Not everything above is decided yet — <a href="notebook.html?project=poorna-viraam" class="bridge-link">some of it is still just notes</a>.</p>
+  </div>
+</section>
+
+<footer class="site-end">
+  <div class="wrap">
+    <a href="index.html" class="back mono">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M2 7L6 3M2 7L6 11" stroke="currentColor" stroke-width="1.6"/></svg>
+      Back to the index
+    </a>
+    <span class="copy mono">© 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>

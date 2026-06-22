@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kapil — Index of Works</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Unbounded:wght@800;900&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --ink: #14140F;
+      --paper: #F0F1EC;
+      --flare: #FF4D1C;
+      --void: #2E1B5C;
+      --gold: #B5901E;
+      --mint: #1FAE82;
+      --line: rgba(20, 20, 15, 0.14);
+      --gap: clamp(16px, 3vw, 32px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Archivo', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--flare);
+      outline-offset: 3px;
+    }
+
+    /* ---------- layout shell ---------- */
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 64px);
+    }
+
+    nav.top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+
+    nav.top .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .mark {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+
+    .mark::after {
+      content: ".";
+      color: var(--flare);
+    }
+
+    .status-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(20, 20, 15, 0.6);
+    }
+
+    .notebook-nav-link {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(20, 20, 15, 0.6);
+      text-decoration: none;
+    }
+
+    .notebook-nav-link:hover {
+      color: var(--ink);
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 0 rgba(31, 174, 130, 0.5);
+      animation: pulse 2.4s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(31, 174, 130, 0.45);
+      }
+
+      70% {
+        box-shadow: 0 0 0 7px rgba(31, 174, 130, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(31, 174, 130, 0);
+      }
+    }
+
+    /* ---------- hero ---------- */
+    .hero {
+      padding: clamp(64px, 12vw, 140px) 0 clamp(48px, 8vw, 96px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(20, 20, 15, 0.55);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: clamp(20px, 4vw, 32px);
+    }
+
+    .eyebrow .rule {
+      width: 36px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.4;
+    }
+
+    h1.headline {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      line-height: 0.96;
+      margin: 0;
+      font-size: clamp(2.6rem, 9vw, 6.4rem);
+      letter-spacing: -0.01em;
+    }
+
+    h1.headline .line2 {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--ink);
+      text-stroke: 2px var(--ink);
+      display: block;
+    }
+
+    @supports not (-webkit-text-stroke: 1px black) {
+      h1.headline .line2 {
+        color: var(--ink);
+        -webkit-text-stroke: 0;
+      }
+    }
+
+    .hero-sub {
+      max-width: 620px;
+      margin: clamp(24px, 4vw, 36px) 0 0;
+      font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+      line-height: 1.55;
+      color: rgba(20, 20, 15, 0.78);
+    }
+
+    .scroll-cue {
+      margin-top: clamp(48px, 8vw, 80px);
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 4px;
+    }
+
+    .scroll-cue svg {
+      animation: bob 1.6s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(4px);
+      }
+    }
+
+    /* ---------- index section ---------- */
+    .index-section {
+      padding: clamp(56px, 8vw, 96px) 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: clamp(28px, 5vw, 48px);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+    }
+
+    .section-head h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.4rem, 2.6vw, 2rem);
+      margin: 0;
+    }
+
+    .section-head .count {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(20, 20, 15, 0.5);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap);
+    }
+
+    .work-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: clamp(22px, 3vw, 34px);
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .work-card,
+      .dot,
+      .scroll-cue svg {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    .work-card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: stretch;
+    }
+
+    .work-card.featured:hover {
+      transform: translateY(-3px);
+      box-shadow: 8px 8px 0 var(--ink);
+      border-color: var(--ink);
+    }
+
+    .tagrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .tagrow .no {
+      color: var(--flare);
+      font-weight: 600;
+    }
+
+    .pill {
+      border: 1px solid var(--ink);
+      padding: 3px 9px;
+      color: rgba(20, 20, 15, 0.7);
+    }
+
+    .pill.dev {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .pill.soon {
+      border-color: rgba(20, 20, 15, 0.3);
+      color: rgba(20, 20, 15, 0.45);
+    }
+
+    .work-card h3 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      margin: 0 0 6px;
+    }
+
+    .working-title {
+      font-size: 0.78rem;
+      color: rgba(20, 20, 15, 0.45);
+      margin: 0 0 18px;
+      letter-spacing: 0.02em;
+    }
+
+    .logline {
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: rgba(20, 20, 15, 0.82);
+      max-width: 46ch;
+    }
+
+    .enter-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 800;
+      font-size: 0.92rem;
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--flare);
+      padding: 12px 18px;
+      transition: transform 0.15s ease;
+    }
+
+    .enter-link:hover {
+      transform: translateX(3px);
+    }
+
+    .enter-link svg {
+      flex-shrink: 0;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .notebook-card-link {
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: none;
+      color: rgba(20, 20, 15, 0.55);
+      text-decoration: none;
+    }
+
+    .notebook-card-link:hover {
+      color: var(--ink);
+    }
+
+    /* generative swatch: jali -> grid blend */
+    .swatch {
+      position: relative;
+      min-height: 220px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: var(--void);
+    }
+
+    .swatch .jali,
+    .swatch .grid {
+      position: absolute;
+      inset: 0;
+    }
+
+    .swatch .jali {
+      background-image:
+        repeating-linear-gradient(45deg, rgba(181, 144, 30, 0.55) 0 1.5px, transparent 1.5px 22px),
+        repeating-linear-gradient(-45deg, rgba(181, 144, 30, 0.55) 0 1.5px, transparent 1.5px 22px);
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 45%, transparent 75%);
+      mask-image: linear-gradient(to right, black 0%, black 45%, transparent 75%);
+    }
+
+    .swatch .grid {
+      background-image:
+        repeating-linear-gradient(0deg, rgba(31, 174, 130, 0.45) 0 1.5px, transparent 1.5px 30px),
+        repeating-linear-gradient(90deg, rgba(31, 174, 130, 0.45) 0 1.5px, transparent 1.5px 30px);
+      -webkit-mask-image: linear-gradient(to left, black 0%, black 45%, transparent 75%);
+      mask-image: linear-gradient(to left, black 0%, black 45%, transparent 75%);
+    }
+
+    .swatch .stars {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(240, 241, 236, 0.9) 1px, transparent 1.5px);
+      background-size: 26px 26px;
+      opacity: 0.35;
+    }
+
+    .work-card.reserved {
+      background:
+        repeating-linear-gradient(135deg, rgba(20, 20, 15, 0.05) 0 1px, transparent 1px 9px);
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+    }
+
+    .work-card.reserved .logline {
+      color: rgba(20, 20, 15, 0.5);
+      font-size: 0.95rem;
+    }
+
+    .work-card.reserved h3 {
+      color: rgba(20, 20, 15, 0.55);
+    }
+
+    @media (max-width: 880px) {
+      .work-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .work-card.featured {
+        grid-template-columns: 1fr;
+      }
+
+      .swatch {
+        min-height: 160px;
+        order: -1;
+      }
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0 40px;
+    }
+
+    footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      color: rgba(20, 20, 15, 0.5);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="top">
+    <div class="wrap">
+      <a href="#top" class="mark">KAPIL</a>
+      <div style="display:flex; align-items:center; gap:18px;">
+        <a href="scratchpad.html" class="notebook-nav-link mono">Notebook</a>
+        <div class="status-chip mono"><span class="dot"></span> index updated continuously</div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="wrap">
+      <div class="eyebrow mono"><span class="rule"></span> INDEX — VOL. 01</div>
+      <h1 class="headline">
+        BUILDING SEVERAL
+        <span class="line2">WORLDS AT ONCE.</span>
+      </h1>
+      <p class="hero-sub">
+        A running index of work in progress. First entry: a feature film about
+        dragons, aliens, and the humans caught between them. More entries get
+        logged here as they're ready to show.
+      </p>
+      <a href="#works" class="scroll-cue mono">
+        The Index
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 5L7 10L12 5" stroke="currentColor" stroke-width="1.6" />
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <section class="index-section" id="works">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>The Index</h2>
+        <span class="count mono">001 active / 002 logging</span>
+      </div>
+
+      <div class="work-grid">
+
+        <!-- Featured: the film -->
+        <article class="work-card featured">
+          <div>
+            <div class="tagrow mono">
+              <span class="no">No. 001</span>
+              <span class="pill dev">In Development</span>
+              <span class="pill">Animated Feature Film</span>
+            </div>
+            <h3>Poorna Viraam</h3>
+            <p class="working-title mono">hindi for &ldquo;full stop&rdquo;</p>
+            <p class="logline">
+              Dragons, aliens, and humans are sharing one dying mythology.
+              A feature about who gets to write the next one — staged
+              somewhere between an Indian golden-age miniature and a
+              poured-concrete megastructure.
+            </p>
+            <div class="card-actions">
+              <a href="poorna-viram.html" class="enter-link">
+                Enter the project
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.8" />
+                </svg>
+              </a>
+              <a href="scratchpad.html?project=poorna-viraam" class="notebook-card-link mono">Notebook →</a>
+            </div>
+          </div>
+          <div class="swatch" aria-hidden="true">
+            <div class="stars"></div>
+            <div class="jali"></div>
+            <div class="grid"></div>
+          </div>
+        </article>
+
+        <!-- Reserved slots -->
+        <article class="work-card reserved">
+          <div>
+            <div class="tagrow mono">
+              <span class="no">No. 002</span>
+              <span class="pill soon">Logging Soon</span>
+              <span class="pill soon">Visual</span>
+            </div>
+            <h3>Next entry.</h3>
+          </div>
+          <p class="logline">In progress — not yet indexed.</p>
+        </article>
+
+        <article class="work-card reserved">
+          <div>
+            <div class="tagrow mono">
+              <span class="no">No. 003</span>
+              <span class="pill soon">Logging Soon</span>
+              <span class="pill soon">Sonic</span>
+            </div>
+            <h3>Next entry.</h3>
+          </div>
+          <p class="logline">In progress — not yet indexed.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap mono">
+      <span>© 2026 KAPIL</span>
+      <span>INDEX UPDATED AS WORK IS MADE</span>
+    </div>
+  </footer>
+
+</body>
+
+</html>

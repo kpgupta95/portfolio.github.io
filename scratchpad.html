@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF3E7;
+    --ink:#3E332B;
+    --ink-soft: rgba(62,51,43,0.62);
+    --peach:#F2A38C;
+    --sage:#9FBB8C;
+    --lavender:#B6A6D9;
+    --butter:#F3D17E;
+    --rose:#E9A6B0;
+    --mint:#A9D6C5;
+    --line: rgba(62,51,43,0.13);
+    --focus:#B5483A;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image: radial-gradient(rgba(62,51,43,0.045) 1px, transparent 1px);
+    background-size: 16px 16px;
+    color:var(--ink);
+    font-family:'Nunito', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; }
+  button{ font: inherit; }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 clamp(20px,5vw,56px); }
+
+  /* ---------------- NAV ---------------- */
+  nav.top{ padding: 22px 0; }
+  nav.top .wrap{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .back{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.85rem;
+    text-decoration:none; color:var(--ink-soft);
+    display:flex; align-items:center; gap:6px;
+  }
+  .back:hover{ color:var(--ink); }
+  .nav-right{ display:flex; align-items:center; gap:16px; }
+  .badge{
+    font-family:'Caveat', cursive; font-weight:700; font-size:1.1rem;
+    color:var(--ink-soft); transform: rotate(-2deg); display:inline-block;
+  }
+  .project-back{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.82rem;
+    color:var(--ink-soft); text-decoration:none;
+  }
+  .project-back:hover{ color:var(--ink); }
+
+  /* ---------------- HERO ---------------- */
+  .hero{ padding: clamp(24px,5vw,48px) 0 clamp(28px,5vw,40px); position:relative; }
+  .doodle{ position:absolute; opacity:0.5; }
+  h1.title{
+    font-family:'Caveat', cursive; font-weight:700;
+    font-size: clamp(3rem, 9vw, 5rem); margin:0; line-height:0.95; color:var(--ink);
+  }
+  p.subhead{
+    font-family:'Nunito', sans-serif; font-weight:500; font-style:italic;
+    font-size: clamp(0.98rem, 1.5vw, 1.1rem); color: var(--ink-soft);
+    max-width:50ch; margin: 14px 0 0; line-height:1.6;
+  }
+
+  /* ---------------- TOOLBAR ---------------- */
+  .toolbar{
+    display:flex; flex-wrap:wrap; align-items:center; gap:12px;
+    padding-bottom:18px; margin-bottom:8px; border-bottom:1px dashed var(--line);
+  }
+  .tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+  .tab{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.85rem;
+    padding:8px 16px; border-radius:20px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink-soft); cursor:pointer;
+  }
+  .tab.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .filter-select{
+    font-family:'Nunito', sans-serif; font-weight:600; font-size:0.85rem;
+    padding:8px 14px; border-radius:20px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink-soft); cursor:pointer;
+  }
+  .filter-select:disabled{ opacity:0.4; cursor:not-allowed; }
+  .toolbar-actions{ display:flex; gap:8px; margin-left:auto; }
+  .ghost-btn{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.82rem;
+    padding:8px 14px; border-radius:20px; border:1.5px solid var(--line);
+    background:transparent; color:var(--ink-soft); cursor:pointer;
+  }
+  .ghost-btn:hover{ background: rgba(62,51,43,0.06); }
+  .add-btn{
+    font-family:'Nunito', sans-serif; font-weight:800; font-size:0.85rem;
+    padding:9px 18px; border-radius:20px; border:none;
+    background: var(--ink); color:var(--paper); cursor:pointer;
+  }
+  .add-btn:hover{ background:#2c2319; }
+
+  p.storage-note{ font-size:0.76rem; color: rgba(62,51,43,0.45); margin: 0 0 30px; }
+
+  /* ---------------- BOARD ---------------- */
+  .board{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: clamp(26px, 3.5vw, 38px);
+    align-items:start;
+    padding-bottom: clamp(60px,8vw,100px);
+  }
+
+  .card{
+    position:relative;
+    padding: 26px 20px 20px;
+    box-shadow: 0 6px 16px rgba(62,51,43,0.14);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor:pointer;
+  }
+  .card:hover{
+    transform: rotate(0deg) translateY(-5px) !important;
+    box-shadow: 0 14px 26px rgba(62,51,43,0.2);
+    z-index:2;
+  }
+
+  .card-controls{
+    position:absolute; top:8px; right:8px; z-index:3;
+    display:flex; gap:6px; opacity:0; transition:opacity 0.15s;
+  }
+  .card:hover .card-controls{ opacity:1; }
+  .card-controls button{
+    width:22px; height:22px; border-radius:50%; border:none;
+    background:rgba(255,255,255,0.9); color:var(--ink); font-size:0.95rem; line-height:1;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 1px 3px rgba(0,0,0,0.22);
+  }
+  .card-controls button:hover{ background:#fff; }
+
+  .card.sticky{ border-radius:4px; }
+  .card.sticky .pin{
+    position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+    width:15px; height:15px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #fff, rgba(255,255,255,0) 45%), var(--pin-color, #c0584a);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  }
+  .card.sticky .cat-label{
+    display:block; font-family:'Nunito', sans-serif; font-weight:800; font-size:0.6rem;
+    letter-spacing:0.05em; text-transform:uppercase; color: rgba(62,51,43,0.5);
+  }
+  .card.sticky p{
+    font-family:'Caveat', cursive; font-weight:600; font-size:1.4rem; line-height:1.26;
+    color: var(--ink); margin:6px 0 0; white-space:pre-wrap;
+  }
+
+  .card.index{ background:#FFFDF8; border-radius:7px; border:1px solid var(--line); }
+  .card.index::before{
+    content:"";
+    position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-3deg);
+    width:64px; height:22px; background: var(--tape, var(--peach)); opacity:0.8; border-radius:2px;
+  }
+  .card.index .label{
+    display:block; font-family:'Nunito', sans-serif; font-weight:800; font-size:0.6rem;
+    letter-spacing:0.05em; text-transform:uppercase; color: var(--ink-soft); margin-bottom:6px;
+  }
+  .card.index .ref-name{
+    display:block; font-family:'Caveat', cursive; font-weight:700; font-size:1.34rem;
+    color: var(--ink); margin-bottom:2px;
+  }
+  .card.index .ref-image{
+    width:100%; height:140px; object-fit:cover; border-radius:5px; margin: 10px 0;
+    display:block; background: rgba(62,51,43,0.06);
+  }
+  .card.index p{
+    font-family:'Nunito', sans-serif; font-size:0.95rem; line-height:1.55;
+    color: var(--ink-soft); margin:6px 0 0; white-space:pre-wrap;
+  }
+  .card.index .ref-source{ font-style:italic; font-size:0.78rem; color: rgba(62,51,43,0.42); margin-top:8px; }
+
+  .card.more{
+    border: 2px dashed rgba(62,51,43,0.25); border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    min-height:140px; box-shadow:none; cursor:default;
+  }
+  .card.more p{
+    font-family:'Caveat', cursive; font-weight:600; font-size:1.25rem;
+    color: rgba(62,51,43,0.45); text-align:center; margin:0;
+  }
+
+  @media (prefers-reduced-motion: reduce){ .card{ transition:none; } }
+
+  /* ---------------- MODAL ---------------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(62,51,43,0.38);
+    display:flex; align-items:center; justify-content:center; padding:20px; z-index:50;
+  }
+  .modal-backdrop[hidden]{ display:none; }
+  .modal{
+    background:#FFFDF8; border-radius:14px; padding:26px 26px 22px;
+    max-width:440px; width:100%; max-height:88vh; overflow-y:auto;
+    box-shadow:0 24px 60px rgba(62,51,43,0.32);
+  }
+  .modal h3{ font-family:'Caveat', cursive; font-size:1.9rem; margin:0 0 16px; }
+  .kind-row{
+    display:flex; gap:18px; margin-bottom:6px;
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.86rem; color: var(--ink-soft);
+  }
+  .kind-row label{ display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .field label{
+    display:block; font-family:'Nunito', sans-serif; font-weight:800;
+    font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em;
+    color: var(--ink-soft); margin: 16px 0 6px;
+  }
+  .field input[type=text], .field input[type=url], .field select, .field textarea{
+    width:100%; font-family:'Nunito', sans-serif; font-size:0.95rem;
+    padding:9px 12px; border-radius:8px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink);
+  }
+  .field textarea{ resize:vertical; }
+  .new-project-row{ margin-top:8px; }
+  .image-row{ display:flex; gap:10px; align-items:center; }
+  .image-row input[type=url]{ flex:1; }
+  .file-btn{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.82rem;
+    padding:9px 13px; border-radius:8px; border:1.5px dashed var(--line);
+    cursor:pointer; color:var(--ink-soft); white-space:nowrap;
+  }
+  .hint{ font-size:0.72rem; color: rgba(62,51,43,0.45); margin:6px 0 0; }
+  .preview-wrap{ margin-top:12px; position:relative; }
+  .preview-wrap img{ width:100%; max-height:170px; object-fit:cover; border-radius:8px; display:block; }
+  .remove-image{
+    position:absolute; top:6px; right:6px; width:24px; height:24px; border-radius:50%;
+    border:none; background:rgba(255,255,255,0.92); cursor:pointer; font-size:0.95rem;
+  }
+  .modal-actions{ display:flex; align-items:center; gap:10px; margin-top:22px; }
+  .modal-actions .spacer{ flex:1; }
+  .danger-btn{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.82rem;
+    padding:8px 14px; border-radius:20px; border:1.5px solid rgba(181,72,58,0.4);
+    background:transparent; color:#B5483A; cursor:pointer;
+  }
+  .danger-btn:hover{ background: rgba(181,72,58,0.08); }
+
+  /* ---------------- FOOTER ---------------- */
+  footer.end{ border-top:1px solid var(--line); padding: 28px 0 44px; }
+  footer.end .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  footer.end a{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:0.85rem;
+    text-decoration:none; color:var(--ink-soft);
+  }
+  footer.end a:hover{ color:var(--ink); }
+  footer.end .note{ font-family:'Nunito', sans-serif; font-size:0.74rem; color: rgba(62,51,43,0.45); }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a href="index.html" class="back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M2 7L6 3M2 7L6 11" stroke="currentColor" stroke-width="1.8"/></svg>
+      Portfolio
+    </a>
+    <div class="nav-right">
+      <span class="badge">the notebook</span>
+      <a href="#" id="projectBackLink" class="project-back" hidden></a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap" style="position:relative;">
+    <svg class="doodle" style="top:-6px; left:38%;" width="44" height="20" viewBox="0 0 44 20" fill="none"><path d="M2 14C8 4 14 4 18 12C22 20 28 4 32 8C36 12 38 6 42 10" stroke="var(--lavender)" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg class="doodle" style="top:8px; right:2%;" width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 1L16 10L25 13L16 16L13 25L10 16L1 13L10 10L13 1Z" stroke="var(--butter)" stroke-width="1.6" stroke-linejoin="round"/></svg>
+
+    <h1 class="title">The Notebook</h1>
+    <p class="subhead">
+      One scratchpad, every project. Story ideas live separately from the inspiration
+      you're collecting for them — pick a project below to narrow things down.
+    </p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="toolbar">
+    <div class="tabs" role="tablist">
+      <button class="tab active" type="button" data-kind="all">All</button>
+      <button class="tab" type="button" data-kind="story">Story Notes</button>
+      <button class="tab" type="button" data-kind="ref">Inspiration</button>
+    </div>
+    <select id="projectFilter" class="filter-select" aria-label="Filter by project"></select>
+    <select id="elementFilter" class="filter-select" aria-label="Filter by story element"></select>
+    <div class="toolbar-actions">
+      <button id="exportBtn" type="button" class="ghost-btn" title="Download everything as a backup file">Export</button>
+      <label class="ghost-btn" for="importInput" style="cursor:pointer;">Import<input type="file" id="importInput" accept="application/json" hidden></label>
+      <button id="addBtn" type="button" class="add-btn">+ Add note</button>
+    </div>
+  </div>
+  <p class="storage-note">Saves automatically, right here in this browser, across every project. Use Export to back things up.</p>
+
+  <div class="board" id="board"></div>
+
+</main>
+
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+  <form class="modal" id="noteForm">
+    <h3 id="modalTitle">New note</h3>
+
+    <div class="kind-row">
+      <label><input type="radio" name="kind" value="story" checked> Story note</label>
+      <label><input type="radio" name="kind" value="ref"> Inspiration / reference</label>
+    </div>
+
+    <div class="field">
+      <label for="projectSelect">Project</label>
+      <select id="projectSelect"></select>
+      <div class="new-project-row" id="newProjectRow" hidden>
+        <input id="newProjectName" type="text" placeholder="New project name">
+      </div>
+    </div>
+
+    <div class="field story-fields">
+      <label for="categorySelect">Element</label>
+      <select id="categorySelect"></select>
+      <label for="storyText">Note</label>
+      <textarea id="storyText" rows="4" placeholder="What's on your mind about this?"></textarea>
+    </div>
+
+    <div class="field ref-fields" hidden>
+      <label for="refTitle">Name</label>
+      <input id="refTitle" type="text" placeholder="e.g. Arcane, a photo you took, a painting...">
+      <label>Image</label>
+      <div class="image-row">
+        <input id="refImageUrl" type="url" placeholder="Paste an image link...">
+        <label class="file-btn">Upload<input id="refImageFile" type="file" accept="image/*" hidden></label>
+      </div>
+      <p class="hint">Tip: this lives right in your browser, so smaller images work best.</p>
+      <div class="preview-wrap" id="previewWrap" hidden>
+        <img id="previewImg" alt="">
+        <button type="button" class="remove-image" id="removeImageBtn" aria-label="Remove image">×</button>
+      </div>
+      <label for="refSource">Source / credit (optional)</label>
+      <input id="refSource" type="text" placeholder="Where this is from">
+      <label for="refNote">Note (optional)</label>
+      <textarea id="refNote" rows="3" placeholder="Why this caught your eye"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" id="deleteBtn" class="danger-btn" hidden>Delete</button>
+      <div class="spacer"></div>
+      <button type="button" id="cancelBtn" class="ghost-btn">Cancel</button>
+      <button type="submit" class="add-btn">Save</button>
+    </div>
+  </form>
+</div>
+
+<footer class="end">
+  <div class="wrap">
+    <a href="index.html">← the index</a>
+    <span class="note">updated whenever something new shows up</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+
+  var STORAGE_KEY = 'kapil-notebook-data';
+
+  var STORY_CATEGORIES = [
+    { key:'character', label:'Character',       bg:'var(--lavender)', pin:'#7d68ad' },
+    { key:'world',     label:'World',            bg:'var(--sage)',     pin:'#5f7a4c' },
+    { key:'plot',      label:'Plot / Structure', bg:'var(--peach)',    pin:'#c0584a' },
+    { key:'theme',     label:'Theme',             bg:'var(--butter)',   pin:'#caa23a' },
+    { key:'question',  label:'Open Question',     bg:'var(--rose)',     pin:'#b5586a' },
+    { key:'other',     label:'Other',             bg:'var(--mint)',     pin:'#4f9a82' }
+  ];
+  var TAPE_COLORS = ['var(--sage)','var(--lavender)','var(--peach)','var(--butter)','var(--rose)','var(--mint)'];
+  var ROTATIONS = [-2, 1, 2, -1, -1.5, 1.5, -0.5, 0.5, 2, -1];
+
+  var DEFAULT_DATA = {
+    projects: [
+      { id:'poorna-viraam', name:'Poorna Viraam', url:'movie.html' }
+    ],
+    notes: [
+      { id:'n1', project:'poorna-viraam', kind:'story', category:'question', text:"Is this story even good — or just my first one? I think I'm okay either way." },
+      { id:'n2', project:'poorna-viraam', kind:'ref', title:'Arcane', image:null, source:'', text:"That high-society glow — want the same scale, just rebuilt out of Indian shapes instead of European ones." },
+      { id:'n3', project:'poorna-viraam', kind:'story', category:'question', text:"Still unsolved: how do you actually show a swarm that's also one thing? Need more references for many-becoming-one." },
+      { id:'n4', project:'poorna-viraam', kind:'ref', title:'Ramayana (anime)', image:null, source:'', text:"An outsider's eye on a mythic India — something useful in how foreign it manages to feel, and still respectful." },
+      { id:'n5', project:'poorna-viraam', kind:'story', category:'character', text:"The humans aren't concrete yet. Don't know if I care about them enough for two years of work — and that's allowed to still be unknown." },
+      { id:'n6', project:'poorna-viraam', kind:'ref', title:'Wakanda (Black Panther)', image:null, source:'', text:"Not the place — the exercise. Imagining your own culture's ideal city instead of borrowing someone else's." },
+      { id:'n7', project:'poorna-viraam', kind:'story', category:'other', text:"Promise to myself: six months, consistently, before deciding if this is the one." },
+      { id:'n8', project:'poorna-viraam', kind:'ref', title:'One Small Step', image:null, source:'', text:"Keeping this close for tone more than visuals." },
+      { id:'n9', project:'poorna-viraam', kind:'story', category:'other', text:"Currently: learning to actually draw dragons. Badly, for now — that's fine." }
+    ]
+  };
+
+  var data = load();
+  var currentKindTab = 'all';
+  var editingId = null;
+  var currentImage = null;
+
+  var params = new URLSearchParams(location.search);
+  var initialProject = params.get('project');
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        if(parsed && Array.isArray(parsed.projects) && Array.isArray(parsed.notes)) return parsed;
+      }
+    }catch(e){ console.warn('Notebook: could not read storage', e); }
+    return JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
+
+  function save(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      return true;
+    }catch(e){
+      alert("Couldn't save that — this browser's storage might be full. Try a smaller image, or use an image link instead of uploading.");
+      return false;
+    }
+  }
+
+  function makeId(){ return 'n' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+  function slugify(name){
+    var s = name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    return s || ('project-' + Date.now());
+  }
+
+  function addProject(name){
+    var base = slugify(name), id = base, n = 2;
+    while(data.projects.some(function(p){ return p.id === id; })){ id = base + '-' + n; n++; }
+    data.projects.push({ id:id, name:name });
+    return id;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function categoryInfo(key){
+    for(var i=0;i<STORY_CATEGORIES.length;i++){ if(STORY_CATEGORIES[i].key === key) return STORY_CATEGORIES[i]; }
+    return STORY_CATEGORIES[STORY_CATEGORIES.length-1];
+  }
+  function projectName(id){
+    var p = data.projects.filter(function(pr){ return pr.id === id; })[0];
+    return p ? p.name : 'Unsorted';
+  }
+
+  // ---------------- elements ----------------
+  var board = document.getElementById('board');
+  var projectFilterEl = document.getElementById('projectFilter');
+  var elementFilterEl = document.getElementById('elementFilter');
+  var modalBackdrop = document.getElementById('modalBackdrop');
+  var form = document.getElementById('noteForm');
+  var modalTitle = document.getElementById('modalTitle');
+  var deleteBtn = document.getElementById('deleteBtn');
+  var cancelBtn = document.getElementById('cancelBtn');
+  var addBtn = document.getElementById('addBtn');
+  var projectSelect = document.getElementById('projectSelect');
+  var newProjectRow = document.getElementById('newProjectRow');
+  var newProjectName = document.getElementById('newProjectName');
+  var categorySelect = document.getElementById('categorySelect');
+  var storyText = document.getElementById('storyText');
+  var storyFields = document.querySelector('.story-fields');
+  var refFields = document.querySelector('.ref-fields');
+  var refTitle = document.getElementById('refTitle');
+  var refSource = document.getElementById('refSource');
+  var refNote = document.getElementById('refNote');
+  var refImageUrl = document.getElementById('refImageUrl');
+  var refImageFile = document.getElementById('refImageFile');
+  var previewWrap = document.getElementById('previewWrap');
+  var previewImg = document.getElementById('previewImg');
+  var removeImageBtn = document.getElementById('removeImageBtn');
+  var exportBtn = document.getElementById('exportBtn');
+  var importInput = document.getElementById('importInput');
+  var projectBackLink = document.getElementById('projectBackLink');
+
+  function populateCategorySelects(){
+    var formHtml = '';
+    var filterHtml = '<option value="all">All elements</option>';
+    STORY_CATEGORIES.forEach(function(c){
+      formHtml += '<option value="' + c.key + '">' + c.label + '</option>';
+      filterHtml += '<option value="' + c.key + '">' + c.label + '</option>';
+    });
+    categorySelect.innerHTML = formHtml;
+    elementFilterEl.innerHTML = filterHtml;
+  }
+
+  function populateProjectSelects(){
+    var prevFilterVal = projectFilterEl.value;
+    var filterHtml = '<option value="all">All projects</option>';
+    var formHtml = '';
+    data.projects.forEach(function(p){
+      var opt = '<option value="' + p.id + '">' + escapeHtml(p.name) + '</option>';
+      filterHtml += opt;
+      formHtml += opt;
+    });
+    formHtml += '<option value="__new__">+ New project…</option>';
+    projectFilterEl.innerHTML = filterHtml;
+    projectSelect.innerHTML = formHtml;
+    if(prevFilterVal){ projectFilterEl.value = prevFilterVal; }
+  }
+
+  function defaultProjectId(){
+    var v = projectFilterEl.value;
+    if(v && v !== 'all') return v;
+    return data.projects.length ? data.projects[0].id : null;
+  }
+
+  // ---------------- rendering ----------------
+  function render(){
+    var catFilter = elementFilterEl.value || 'all';
+    var projFilter = projectFilterEl.value || 'all';
+
+    var list = data.notes.filter(function(n){
+      if(currentKindTab !== 'all' && n.kind !== currentKindTab) return false;
+      if(projFilter !== 'all' && n.project !== projFilter) return false;
+      if(n.kind === 'story' && catFilter !== 'all' && n.category !== catFilter) return false;
+      return true;
+    });
+
+    board.innerHTML = '';
+
+    if(list.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'card more';
+      var p = document.createElement('p');
+      p.textContent = 'Nothing here yet\n— add the first one';
+      empty.appendChild(p);
+      board.appendChild(empty);
+      return;
+    }
+
+    list.forEach(function(note, i){
+      var rotation = ROTATIONS[i % ROTATIONS.length];
+      var card = note.kind === 'story' ? buildStoryCard(note, rotation) : buildRefCard(note, rotation, i);
+      board.appendChild(card);
+    });
+  }
+
+  function buildControls(note){
+    var wrap = document.createElement('div');
+    wrap.className = 'card-controls';
+    var del = document.createElement('button');
+    del.type = 'button';
+    del.setAttribute('aria-label', 'Delete note');
+    del.textContent = '\u00D7';
+    del.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(confirm('Delete this note?')){
+        data.notes = data.notes.filter(function(n){ return n.id !== note.id; });
+        save();
+        render();
+      }
+    });
+    wrap.appendChild(del);
+    return wrap;
+  }
+
+  function buildStoryCard(note, rotation){
+    var info = categoryInfo(note.category);
+    var card = document.createElement('div');
+    card.className = 'card sticky';
+    card.style.background = info.bg;
+    card.style.transform = 'rotate(' + rotation + 'deg)';
+
+    var pin = document.createElement('span');
+    pin.className = 'pin';
+    pin.style.setProperty('--pin-color', info.pin);
+    card.appendChild(pin);
+
+    card.appendChild(buildControls(note));
+
+    var label = document.createElement('span');
+    label.className = 'cat-label';
+    label.textContent = projectName(note.project) + ' · ' + info.label;
+    card.appendChild(label);
+
+    var p = document.createElement('p');
+    p.textContent = note.text;
+    card.appendChild(p);
+
+    card.addEventListener('click', function(e){ if(!e.target.closest('.card-controls')) openModal(note); });
+    return card;
+  }
+
+  function buildRefCard(note, rotation, i){
+    var card = document.createElement('div');
+    card.className = 'card index';
+    card.style.transform = 'rotate(' + rotation + 'deg)';
+    card.style.setProperty('--tape', TAPE_COLORS[i % TAPE_COLORS.length]);
+
+    card.appendChild(buildControls(note));
+
+    var label = document.createElement('span');
+    label.className = 'label';
+    label.textContent = projectName(note.project) + ' · inspiration';
+    card.appendChild(label);
+
+    if(note.title){
+      var name = document.createElement('span');
+      name.className = 'ref-name';
+      name.textContent = note.title;
+      card.appendChild(name);
+    }
+
+    if(note.image){
+      var img = document.createElement('img');
+      img.className = 'ref-image';
+      img.src = note.image;
+      img.alt = note.title || 'reference image';
+      card.appendChild(img);
+    }
+
+    if(note.text){
+      var p = document.createElement('p');
+      p.textContent = note.text;
+      card.appendChild(p);
+    }
+
+    if(note.source){
+      var src = document.createElement('p');
+      src.className = 'ref-source';
+      src.textContent = note.source;
+      card.appendChild(src);
+    }
+
+    card.addEventListener('click', function(e){ if(!e.target.closest('.card-controls')) openModal(note); });
+    return card;
+  }
+
+  // ---------------- modal ----------------
+  function updateFieldVisibility(){
+    var kind = form.querySelector('input[name=kind]:checked').value;
+    storyFields.hidden = kind !== 'story';
+    refFields.hidden = kind !== 'ref';
+  }
+
+  function updatePreview(){
+    if(currentImage){ previewImg.src = currentImage; previewWrap.hidden = false; }
+    else{ previewWrap.hidden = true; previewImg.src = ''; }
+  }
+
+  function openModal(existingNote){
+    editingId = existingNote ? existingNote.id : null;
+    modalTitle.textContent = existingNote ? 'Edit note' : 'New note';
+    deleteBtn.hidden = !existingNote;
+
+    var kind = existingNote ? existingNote.kind : (currentKindTab === 'ref' ? 'ref' : 'story');
+    var radio = form.querySelector('input[name=kind][value="' + kind + '"]');
+    if(radio) radio.checked = true;
+    updateFieldVisibility();
+
+    newProjectRow.hidden = true;
+    newProjectName.value = '';
+    projectSelect.value = existingNote ? existingNote.project : defaultProjectId();
+
+    categorySelect.value = (existingNote && existingNote.kind === 'story') ? existingNote.category : STORY_CATEGORIES[0].key;
+    storyText.value = (existingNote && existingNote.kind === 'story') ? existingNote.text : '';
+
+    refTitle.value = (existingNote && existingNote.kind === 'ref') ? (existingNote.title || '') : '';
+    refSource.value = (existingNote && existingNote.kind === 'ref') ? (existingNote.source || '') : '';
+    refNote.value = (existingNote && existingNote.kind === 'ref') ? (existingNote.text || '') : '';
+    currentImage = (existingNote && existingNote.kind === 'ref') ? (existingNote.image || null) : null;
+    refImageUrl.value = (currentImage && currentImage.indexOf('data:') !== 0) ? currentImage : '';
+    refImageFile.value = '';
+    updatePreview();
+
+    modalBackdrop.hidden = false;
+    setTimeout(function(){ (kind === 'story' ? storyText : refTitle).focus(); }, 0);
+  }
+
+  function closeModal(){
+    modalBackdrop.hidden = true;
+    form.reset();
+    editingId = null;
+    currentImage = null;
+    updatePreview();
+  }
+
+  addBtn.addEventListener('click', function(){ openModal(null); });
+  cancelBtn.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', function(e){ if(e.target === modalBackdrop) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !modalBackdrop.hidden) closeModal(); });
+
+  form.querySelectorAll('input[name=kind]').forEach(function(r){ r.addEventListener('change', updateFieldVisibility); });
+
+  projectSelect.addEventListener('change', function(){
+    newProjectRow.hidden = projectSelect.value !== '__new__';
+    if(!newProjectRow.hidden){ setTimeout(function(){ newProjectName.focus(); }, 0); }
+  });
+
+  refImageUrl.addEventListener('input', function(){
+    var v = refImageUrl.value.trim();
+    if(v){ currentImage = v; refImageFile.value = ''; updatePreview(); }
+  });
+
+  refImageFile.addEventListener('change', function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      var img = new Image();
+      img.onload = function(){
+        var maxW = 1200;
+        var w = img.width, h = img.height;
+        if(w > maxW){ h = Math.round(h * (maxW / w)); w = maxW; }
+        var canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        currentImage = canvas.toDataURL('image/jpeg', 0.82);
+        refImageUrl.value = '';
+        updatePreview();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  removeImageBtn.addEventListener('click', function(){
+    currentImage = null; refImageUrl.value = ''; refImageFile.value = ''; updatePreview();
+  });
+
+  deleteBtn.addEventListener('click', function(){
+    if(editingId && confirm('Delete this note?')){
+      data.notes = data.notes.filter(function(n){ return n.id !== editingId; });
+      save();
+      render();
+      closeModal();
+    }
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    var projectId = projectSelect.value;
+    if(projectId === '__new__'){
+      var newName = newProjectName.value.trim();
+      if(!newName){ newProjectName.focus(); return; }
+      projectId = addProject(newName);
+      populateProjectSelects();
+    }
+    if(!projectId){ return; }
+
+    var kind = form.querySelector('input[name=kind]:checked').value;
+    var data_;
+    if(kind === 'story'){
+      var text = storyText.value.trim();
+      if(!text){ storyText.focus(); return; }
+      data_ = { project: projectId, kind:'story', category: categorySelect.value, text: text };
+    }else{
+      var title = refTitle.value.trim();
+      var noteText = refNote.value.trim();
+      var source = refSource.value.trim();
+      if(!title && !currentImage){ refTitle.focus(); return; }
+      data_ = { project: projectId, kind:'ref', title: title, text: noteText, source: source, image: currentImage };
+    }
+
+    if(editingId){
+      var idx = -1;
+      for(var i=0;i<data.notes.length;i++){ if(data.notes[i].id === editingId){ idx = i; break; } }
+      if(idx > -1) data.notes[idx] = Object.assign({}, data.notes[idx], data_);
+    }else{
+      data.notes.push(Object.assign({ id: makeId(), createdAt: Date.now() }, data_));
+    }
+
+    if(save()){ render(); closeModal(); }
+  });
+
+  // ---------------- toolbar ----------------
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentKindTab = btn.dataset.kind;
+      elementFilterEl.disabled = (currentKindTab === 'ref');
+      render();
+    });
+  });
+  projectFilterEl.addEventListener('change', render);
+  elementFilterEl.addEventListener('change', render);
+
+  exportBtn.addEventListener('click', function(){
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'notebook-export.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  importInput.addEventListener('change', function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        var parsed = JSON.parse(ev.target.result);
+        if(!parsed || !Array.isArray(parsed.projects) || !Array.isArray(parsed.notes)) throw new Error('bad shape');
+        if(confirm('Import ' + parsed.notes.length + ' notes across ' + parsed.projects.length + ' project(s)? This replaces what\'s currently here.')){
+          data = parsed;
+          save();
+          populateProjectSelects();
+          render();
+        }
+      }catch(err){
+        alert("Couldn't read that file — make sure it's a notebook export.");
+      }
+      importInput.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  // ---------------- init ----------------
+  populateProjectSelects();
+  populateCategorySelects();
+
+  if(initialProject && data.projects.some(function(p){ return p.id === initialProject; })){
+    projectFilterEl.value = initialProject;
+    var proj = data.projects.filter(function(p){ return p.id === initialProject; })[0];
+    if(proj && proj.url){
+      projectBackLink.href = proj.url;
+      projectBackLink.textContent = '→ ' + proj.name;
+      projectBackLink.hidden = false;
+    }
+  }
+
+  render();
+
+})();
+</script>
+
+</body>
+</html>
